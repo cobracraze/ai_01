@@ -1,0 +1,27 @@
+import random
+
+def quadratic_function(x):
+  return (x-5)**2
+
+population_size = 100
+num_gen = 100
+mutation_rate = 0.1
+population = []
+
+for i in range(population_size):
+  chromosome = [random.uniform(-10,10)]
+  population.append(chromosome)
+
+for g in range(num_gen):
+  fitness = [quadratic_function(chromosome[0]) for chromosome in population]
+  parents = random.choices(population, weights = fitness, k = population_size)
+  next_gen = []
+  for p1,p2 in zip(parents[::2],parents[1::2]):
+    child = [p1[0] if random.random() < 0.5 else p2[0]]
+    if random.random() < mutation_rate:
+      child = [random.uniform(-10,10)]
+    next_gen.append(child)
+  population = next_gen
+
+best = min(population, key = lambda x:quadratic_function(x[0]))
+print("Best solution: x=%s, f(x)=%s" % (best, quadratic_function(best[0])))
