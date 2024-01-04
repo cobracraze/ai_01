@@ -1,0 +1,28 @@
+import numpy as np
+import pandas as pd
+from sklearn import datasets
+from sklearn import metrics
+from sklearn.cluster import KMeans
+from sklearn.mixture import GaussianMixture
+
+iris = datasets.load_iris()
+x = iris.data
+y = iris.target
+
+kmeans = KMeans(n_clusters=3)
+y_kmeans = kmeans.fit_predict(x)
+
+gmm = GaussianMixture(n_components=3)
+y_em = gmm.fit_predict(x)
+
+print("KMeans labels:",y_kmeans)
+print("EM labels:",y_em)
+
+print("KMeans Homogeneity Score:",metrics.homogeneity_score(y,y_kmeans))
+print("EM Homogeneity Score:",metrics.homogeneity_score(y,y_em))
+
+print("KMeans Completeness Score:",metrics.completeness_score(y,y_kmeans))
+print("EM Completeness Score:",metrics.completeness_score(y,y_em))
+
+print("KMeans Adjusted Rand Index:",metrics.adjusted_rand_score(y,y_kmeans))
+print("EM Adjusted Rand Index:",metrics.adjusted_rand_score(y,y_em))
