@@ -1,0 +1,31 @@
+import numpy as np
+
+sigmoid = lambda x: 1 / (1 + np.exp(-x))
+X, y = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]), np.array([[0], [1], [1], [0]])
+wh, bh, wo, bo = np.random.randn(2, 2), np.zeros((1, 2)), np.random.randn(2, 1), np.zeros((1, 1))
+
+def forward(x): 
+    return sigmoid(np.dot(sigmoid(np.dot(x, wh) + bh), wo) + bo)
+
+print("Before:", forward(X))
+
+# Initialize error between y and output
+eo = y - forward(X)
+
+learning_rate = 0.1
+for _ in range(10000):
+    h = sigmoid(np.dot(X, wh) + bh)
+    o = sigmoid(np.dot(h, wo) + bo)
+    
+    # Update error
+    eo = y - o
+    
+    do = eo * o * (1 - o)
+    dh = np.dot(do, wo.T) * h * (1 - h)
+    
+    wo += np.dot(h.T, do) * learning_rate
+    bo += np.sum(do, axis=0, keepdims=True) * learning_rate
+    wh += np.dot(X.T, dh) * learning_rate
+    bh += np.sum(dh, axis=0, keepdims=True) * learning_rate
+
+print("After:", forward(X))
