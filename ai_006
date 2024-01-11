@@ -16,7 +16,7 @@ for i in range(100):
   if action == 0:
     new_state = max(state-1,0)
   else:
-    new_state = max(state+1,3)
+    new_state = min(state+1,3)
   reward = 1
 
   if new_state in q_table:
